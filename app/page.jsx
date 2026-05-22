@@ -103,7 +103,7 @@ export default function Home() {
               <strong className="text-stone-400 font-medium">
                 2,400+ engineers
               </strong>{" "}
-              cracked FAANG interviews via Prept
+              cracked FAANG interviews via Prepty
             </p>
           </div>
         </div>
