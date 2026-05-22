@@ -2,6 +2,7 @@ import BentoCard from "@/components/BentoCard";
 import { CodeDemo } from "@/components/demo-components-animate-code";
 import { HexagonBackgroundDemo } from "@/components/demo-components-backgrounds-hexagon";
 import { StarsBackgroundDemo } from "@/components/demo-components-backgrounds-stars";
+import PricingSection from "@/components/PricingSection";
 import {
   GoldTitle,
   GrayTitle,
@@ -11,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AI_TAGS, AVATARS, LOGOS, ROLES, SLOTS } from "@/lib/data";
+import { PricingTable } from "@clerk/nextjs";
 import { Bot, Wallet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,7 +67,7 @@ export default function Home() {
           </p>
 
           <div className="relative flex justify-center gap-2 sm:gap-4 mt-10 sm:w-auto">
-            <Link href="/sign-up">
+            <Link href="/onboarding">
               <Button variant="gold" size="hero">
                 Get started
               </Button>
@@ -290,14 +292,24 @@ export default function Home() {
             Each credit = one session. Unused credits roll over.
           </p>
         </div>
-
         {/* <PricingSection /> */}
+        <PricingTable
+          checkoutProps={{
+            appearance: {
+              elements: {
+                drawerRoot: {
+                  zIndex: 9999,
+                },
+              },
+            },
+          }}
+        />
       </section>
 
       {/* CTA */}
       <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">
         <div className="relative border border-amber-400/20 rounded-3xl px-3 sm:px-16 py-20 bg-linear-to-br from-amber-400/5 text-center overflow-hidden">
-          <StarsBackgroundDemo />
+          <HexagonBackgroundDemo />
 
           <h2 className="font-serif relative text-4xl md:text-5xl leading-tight tracking-tight mb-4">
             <GrayTitle>Your next interview</GrayTitle>
@@ -306,7 +318,7 @@ export default function Home() {
           </h2>
 
           <p className="relative text-stone-400 font-light text-sm mb-11">
-            Join thousands of engineers already levelling up on Prept.
+            Join thousands of engineers already levelling up on Prepty.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
