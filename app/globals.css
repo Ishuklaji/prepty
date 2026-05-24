@@ -126,6 +126,7 @@
     grid-template-columns: auto !important;
   }
 }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
