@@ -7,6 +7,14 @@ import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
 import { createRateLimiter, checkRateLimit } from "@/lib/arcjet";
 
+// 5 booking attempts per hour — generous enough for real users,
+// tight enough to block automated abuse
+const bookingLimiter = createRateLimiter({
+  refillRate: 2,
+  interval: "1h",
+  capacity: 5,
+});
+
 export const getInterviewerProfile = async (interviewerId) => {
   try {
     const interviewer = await db.user.findUnique({
@@ -79,4 +87,99 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
 
   // ── Create Stream call ─────────────────────────────────────────────────────
   let streamCallId;
-};;
+  try {
+    // Implementation for creating Stream call
+    const streamClient = new StreamClient(
+      process.env.NEXT_PUBLIC_STREAM_API_KEY,
+      process.env.STREAM_SECRET_KEY,
+    );
+
+    await streamClient.upsertUsers([
+      {
+        id: dbUser.clerkUserId,
+        name: dbUser.name ?? "Interviewee",
+        image: dbUser.imageUrl ?? undefined,
+        role: "user",
+      },
+      {
+        id: interviewer.clerkUserId,
+        name: interviewer.name ?? "Interviewer",
+        image: interviewer.imageUrl ?? undefined,
+        role: "user",
+      },
+    ]);
+
+    streamCallId = `mock_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+    const call = streamClient.video.call("default", streamCallId);
+
+    await call.getOrCreate({
+      data: {
+        created_by_id: dbUser.clerkUserId,
+        members: [
+          { user_id: dbUser.clerkUserId, role: "host" },
+          { user_id: interviewer.clerkUserId, role: "host" },
+        ],
+        settings_override: {
+          recording: { mode: "available", quality: "1080p" },
+          screensharing: {
+            enabled: true,
+            // target_resolution: { width: 1920, height: 1080 },
+          },
+          transcription: {
+            mode: "auto-on", // starts when first user joins, stops when all leave
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error creating Stream call:", error);
+    throw new Error("Failed to create call session");
+  }
+
+  try {
+    const booking = await db.transaction(async (tx) => {
+      // Create booking
+      const newBooking = await tx.booking.create({
+        data: {
+          intervieweeId: dbUser.id,
+          interviewerId,
+          startTime: new Date(startTime),
+          endTime: new Date(endTime),
+          status: "SCHEDULED",
+          creditsCharged: credits,
+          streamCallId,
+        },
+      });
+
+      await tx.creditTransaction.create({
+        data: {
+          userId: dbUser.id,
+          amount: -credits,
+          type: "BOOKING_DEDUCTION",
+          bookingId: newBooking.id,
+        },
+      });
+
+      await tx.user.update({
+        where: { id: dbUser.id },
+        data: { credits: { decrement: credits } },
+      });
+
+      await tx.user.update({
+        where: { id: interviewerId },
+        data: { creditBalance: { increment: credits } },
+      });
+
+      return newBooking;
+    });
+
+    revalidatePath(`/interviewers/${interviewerId}`);
+    revalidatePath("/dashboard");
+
+    return { success: true, bookingId: booking.id, streamCallId };
+  } catch (err) {
+    console.error("bookSlot transaction failed:", err);
+    throw new Error("Booking failed. Please try again.");
+  }
+};
