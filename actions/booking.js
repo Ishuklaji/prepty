@@ -138,7 +138,7 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
   }
 
   try {
-    const booking = await db.transaction(async (tx) => {
+    const booking = await db.$transaction(async (tx) => {
       // Create booking
       const newBooking = await tx.booking.create({
         data: {
