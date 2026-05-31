@@ -127,6 +127,21 @@
   }
 }
 
+.call-video-stage [class*="str-video__speaker-layout"],
+.call-video-stage [class*="str-video__speaker-layout"] > *,
+.call-video-stage .str-video__participant-view {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.str-chat,
+.str-chat__channel,
+.str-chat__main-panel {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

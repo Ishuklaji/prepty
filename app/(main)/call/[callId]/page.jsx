@@ -1,9 +1,8 @@
+import { redirect, notFound } from "next/navigation";
 import { getCallData } from "@/actions/call";
-import { notFound, redirect } from "next/navigation";
-import React from "react";
 import CallRoom from "./_components/CallRoom";
 
-const CallPage = async ({ params }) => {
+export default async function CallPage({ params }) {
   const { callId } = await params;
 
   const result = await getCallData(callId);
@@ -30,6 +29,4 @@ const CallPage = async ({ params }) => {
       isInterviewer={isInterviewer}
     />
   );
-};
-
-export default CallPage;
+}
