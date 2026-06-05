@@ -2,6 +2,7 @@ import {
   getAvailability,
   getInterviewerAppointments,
   getInterviewerStats,
+  getWithdrawalHistory,
 } from "@/actions/dashboard";
 import { getCurrentUser } from "@/actions/user";
 import PageHeader from "@/components/reusables";
@@ -27,7 +28,7 @@ const InterviewerDashboardPage = async () => {
       getInterviewerStats(),
 
       // Assignment
-      //   getWithdrawalHistory(),
+      getWithdrawalHistory(),
     ]);
 
   return (
