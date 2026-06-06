@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { GoldTitle, GrayTitle, SectionLabel } from "@/components/reusables";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,8 @@ import useFetch from "@/hooks/use-fetch";
 import { CATEGORIES, ONBOARDING_ROLES, YEARS_OPTIONS } from "@/lib/data";
 
 const OnboardingPage = () => {
+  const router = useRouter();
+
   const { data, loading, fn: onboardingFn } = useFetch(completeOnboarding);
 
   const [role, setRole] = useState(null);
@@ -22,10 +25,10 @@ const OnboardingPage = () => {
   });
 
   useEffect(() => {
-    if (data?.redirectTo && !loading) {
-      window.location.replace(data.redirectTo);
+    if (data && !loading) {
+      router.push(role === "INTERVIEWER" ? "/dashboard" : "/explore");
     }
-  }, [data?.redirectTo, loading]);
+  }, [data, router]);
 
   const toggleCategory = (val) => {
     setForm((prev) => ({
@@ -45,7 +48,6 @@ const OnboardingPage = () => {
 
   const canSubmit =
     role === "INTERVIEWEE" || (role === "INTERVIEWER" && isInterviewerValid);
-  const isRedirecting = Boolean(data?.redirectTo);
 
   const handleSubmit = () => {
     if (!canSubmit) return;
@@ -214,10 +216,10 @@ const OnboardingPage = () => {
               variant="gold"
               size="hero"
               className="w-full"
-              disabled={!canSubmit || loading || isRedirecting}
+              disabled={!canSubmit || loading}
               onClick={handleSubmit}
             >
-              {loading || isRedirecting
+              {loading
                 ? "Setting up your account…"
                 : role === "INTERVIEWER"
                   ? "Create interviewer profile →"

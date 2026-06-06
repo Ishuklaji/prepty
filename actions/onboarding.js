@@ -1,7 +1,6 @@
 "use server";
 
 import { currentUser } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 import { db } from "@/lib/prisma";
 
 export const completeOnboarding = async (data) => {
@@ -38,13 +37,7 @@ export const completeOnboarding = async (data) => {
       },
     });
 
-    const redirectTo = role === "INTERVIEWER" ? "/dashboard" : "/explore";
-
-    revalidatePath("/", "layout");
-    revalidatePath("/onboarding");
-    revalidatePath(redirectTo);
-
-    return { success: true, redirectTo };
+    return { success: true };
   } catch (error) {
     console.error("Onboarding error:", error);
     throw new Error("Something went wrong. Please try again.");
