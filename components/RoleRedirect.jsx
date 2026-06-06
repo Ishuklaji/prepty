@@ -3,31 +3,41 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const INTERVIEWER_ONLY = ["/appointments"];
-const INTERVIEWEE_ONLY = ["/dashboard"];
+const INTERVIEWER_BLOCKED = ["/appointments"];
+const INTERVIEWEE_BLOCKED = ["/dashboard"];
 
 export default function RoleRedirect({ role }) {
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    if (role === "UNASSIGNED" && pathname !== "/onboarding")
+    if (!role || !pathname) return;
+
+    if (role === "UNASSIGNED" && pathname !== "/onboarding") {
       router.replace("/onboarding");
-    // Already onboarded users shouldn't be on /onboarding
-    if (role === "INTERVIEWER" && pathname.startsWith("/onboarding"))
-      router.replace("/dashboard");
-    if (role === "INTERVIEWEE" && pathname.startsWith("/onboarding"))
-      router.replace("/explore");
+      return;
+    }
+
     if (
       role === "INTERVIEWER" &&
-      INTERVIEWER_ONLY.some((p) => pathname.startsWith(p))
-    )
+      (pathname.startsWith("/onboarding") ||
+        INTERVIEWER_BLOCKED.some((p) => pathname.startsWith(p)))
+    ) {
       router.replace("/dashboard");
+      return;
+    }
+
+    if (role === "INTERVIEWEE" && pathname.startsWith("/onboarding")) {
+      router.replace("/explore");
+      return;
+    }
+
     if (
       role === "INTERVIEWEE" &&
-      INTERVIEWEE_ONLY.some((p) => pathname.startsWith(p))
-    )
+      INTERVIEWEE_BLOCKED.some((p) => pathname.startsWith(p))
+    ) {
       router.replace("/appointments");
+    }
   }, [role, pathname, router]);
 
   return null;
