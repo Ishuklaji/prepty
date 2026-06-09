@@ -16,7 +16,7 @@ const ExplorePage = async () => {
       />
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-8 xl:px-0 py-10">
+      <div className="max-w-6xl mx-auto px-8 xl:px-0 py-10 cursor-pointer">
         <ExploreGrid interviewers={interviewers} />
       </div>
     </main>
