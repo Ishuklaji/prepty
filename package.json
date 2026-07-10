@@ -19,6 +19,7 @@
     "@react-email/components": "^1.0.12",
     "@stream-io/node-sdk": "^0.7.59",
     "@stream-io/video-react-sdk": "^1.37.3",
+    "@vercel/functions": "^3.7.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.3.0",
