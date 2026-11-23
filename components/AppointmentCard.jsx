@@ -15,10 +15,35 @@ import { formatDate, formatDuration, formatTime } from "@/lib/helpers";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import FeedbackModal from "./FeedbackModal";
+import { getRecordingUrl } from "@/actions/call";
+import { toast } from "sonner";
 
 const AppointmentCard = ({ booking, mode, isPast = false }) => {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [recordingLoading, setRecordingLoading] = useState(false);
   const { has } = useAuth();
+
+  // Stored recording URLs are signed and expire — fetch a fresh one on click.
+  const openRecording = async () => {
+    // Open the tab synchronously so popup blockers allow it
+    const win = window.open("", "_blank");
+    setRecordingLoading(true);
+    try {
+      const res = await getRecordingUrl(booking.id);
+      if (res?.url) {
+        if (win) win.location.href = res.url;
+        else window.location.href = res.url;
+      } else {
+        win?.close();
+        toast.error(res?.error ?? "Recording unavailable");
+      }
+    } catch {
+      win?.close();
+      toast.error("Could not load the recording.");
+    } finally {
+      setRecordingLoading(false);
+    }
+  };
 
   const {
     startTime,
@@ -172,14 +197,14 @@ const AppointmentCard = ({ booking, mode, isPast = false }) => {
             )}
 
             {recordingUrl && has?.({ plan: "pro" }) && (
-              <Button variant="outline" size="sm" className="gap-2" asChild>
-                <a
-                  href={recordingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  📹 Recording
-                </a>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 cursor-pointer"
+                onClick={openRecording}
+                disabled={recordingLoading}
+              >
+                {recordingLoading ? "Loading…" : "📹 Recording"}
               </Button>
             )}
 

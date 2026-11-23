@@ -65,3 +65,57 @@ export const getCallData = async (callId) => {
     },
   };
 };
+
+// ─── Fresh recording link ────────────────────────────────────────────────────
+// Stream recording URLs are signed and expire, so the URL saved by the
+// webhook stops working (AccessDenied). Ask Stream for a fresh signed URL
+// each time the user opens a recording.
+export const getRecordingUrl = async (bookingId) => {
+  const user = await currentUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const booking = await db.booking.findUnique({
+    where: { id: bookingId },
+    select: {
+      streamCallId: true,
+      interviewer: { select: { clerkUserId: true } },
+      interviewee: { select: { clerkUserId: true } },
+    },
+  });
+
+  if (!booking?.streamCallId) return { error: "Recording not found" };
+  if (
+    booking.interviewer.clerkUserId !== user.id &&
+    booking.interviewee.clerkUserId !== user.id
+  )
+    return { error: "Forbidden" };
+
+  try {
+    const streamClient = new StreamClient(
+      process.env.NEXT_PUBLIC_STREAM_API_KEY,
+      process.env.STREAM_SECRET_KEY,
+    );
+    const { recordings } = await streamClient.video
+      .call("default", booking.streamCallId)
+      .listRecordings();
+
+    // Newest first; skip files Stream has already purged
+    const sorted = [...(recordings ?? [])].sort(
+      (a, b) => new Date(b.start_time) - new Date(a.start_time),
+    );
+    for (const rec of sorted) {
+      const res = await fetch(rec.url, {
+        method: "GET",
+        headers: { Range: "bytes=0-0" },
+      });
+      if (res.ok) return { url: rec.url };
+    }
+
+    return {
+      error: "This recording has expired and is no longer available.",
+    };
+  } catch (error) {
+    console.error("getRecordingUrl error:", error);
+    return { error: "Could not load the recording. Please try again." };
+  }
+};

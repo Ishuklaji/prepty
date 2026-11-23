@@ -7,6 +7,8 @@ const isProtectedRoute = createRouteMatcher([
   "/explore(.*)",
   "/dashboard(.*)",
   "/onboarding(.*)",
+  "/call(.*)",
+  "/interviewers(.*)",
 ]);
 
 // Trusted external webhooks — skip Arcjet entirely

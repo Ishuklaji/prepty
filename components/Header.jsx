@@ -32,7 +32,7 @@ const Header = async () => {
           <SignInButton>
             <Button variant="ghost">Sign In</Button>
           </SignInButton>
-          <SignUpButton>
+          <SignUpButton forceRedirectUrl="/onboarding">
             <Button variant="gold">Get Started →</Button>
           </SignUpButton>
         </Show>

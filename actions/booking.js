@@ -70,6 +70,13 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
 
   const credits = interviewer.creditRate ?? 1;
 
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  if (isNaN(start) || isNaN(end) || start >= end)
+    throw new Error("Invalid time slot");
+  if (start <= new Date())
+    throw new Error("This slot is in the past. Please pick another.");
+
   if (dbUser.credits < credits)
     throw new Error("Insufficient credits. Please upgrade your plan.");
 
