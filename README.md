@@ -25,6 +25,31 @@ Prepty pairs candidates with experienced interviewers for realistic, role-specif
 - **Interviewees** — book sessions with engineers from top companies, get tailored questions, and walk away with an AI-scored feedback report.
 - **Interviewers** — set availability, run sessions with AI-assisted question generation, and earn payouts for their time.
 
+## Uses
+
+- **Practise before a real interview** — run a full mock interview with an engineer who has hired for the role you want.
+- **Prepare for a specific round** — book sessions focused on Frontend, Backend, Full Stack, DSA, System Design, Behavioral, DevOps or Mobile.
+- **Find your weak spots** — use the AI feedback report to see exactly where you lost points.
+- **Review your performance** — watch the session recording to notice habits you can't see in the moment.
+- **Earn from your experience** — senior engineers can interview candidates in their free hours and withdraw what they earn.
+
+## Benefits
+
+### For interviewees
+- **Realistic practice** — a live video interview with a real person, not a quiz or a chatbot.
+- **Clear next steps** — every session ends with a written report covering technical skills, communication and problem-solving, plus strengths and things to improve.
+- **Pay only for what you use** — one credit per session, with unused credits rolling over to next month.
+- **Easy booking** — pick an open slot and confirm in one click; no emails back and forth.
+
+### For interviewers
+- **Flexible income** — set your own hours once and get booked automatically.
+- **Less preparation** — the AI co-pilot suggests role-specific questions during the call.
+- **Simple payouts** — earnings build up as credits and can be withdrawn from the dashboard.
+
+### For both
+- **Everything in one place** — booking, video call, screen sharing, recording and feedback without switching apps.
+- **Safe by default** — sign-in with Clerk, and bot protection and rate limiting with Arcjet.
+
 ## How to use
 
 ### If you want to practise for interviews (Interviewee)
