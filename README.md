@@ -25,6 +25,34 @@ Prepty pairs candidates with experienced interviewers for realistic, role-specif
 - **Interviewees** — book sessions with engineers from top companies, get tailored questions, and walk away with an AI-scored feedback report.
 - **Interviewers** — set availability, run sessions with AI-assisted question generation, and earn payouts for their time.
 
+## How to use
+
+### If you want to practise for interviews (Interviewee)
+
+1. **Sign up** — open [prepty.vercel.app](https://prepty.vercel.app) and click **Get started**.
+2. **Pick your role** — choose **Interviewee**. (This can't be changed later.)
+3. **Find an interviewer** — on the **Explore** page, search by name or company, or filter by topic (Frontend, Backend, DSA, System Design…).
+4. **Book a slot** — open an interviewer's profile, pick a date and a time slot, and confirm. One session costs the interviewer's credit rate (usually 1 credit).
+5. **Join the call** — go to **My Appointments** and click **Join call** when it's time. Allow camera and microphone access.
+6. **Review your session** — after the call, open **My Appointments** again:
+   - **Full Feedback** — your AI feedback report (Starter and Pro plans).
+   - **📹 Recording** — watch the session again (Pro plan). Recordings are kept for about two weeks.
+7. **Need more credits?** — click the credits button in the top bar to see plans and upgrade.
+
+### If you want to take interviews (Interviewer)
+
+1. **Sign up** and choose **Interviewer** as your role.
+2. **Fill in your profile** — job title, company, years of experience, the topics you interview for, and a short bio.
+3. **Set your availability** — on your **Dashboard**, open the **Availability** tab and choose the hours you're free each day.
+4. **Run sessions** — booked sessions appear under **Appointments**. Click **Join call** at the start time. During the call you can generate interview questions with the AI co-pilot.
+5. **Get paid** — every booked session adds credits to your balance. In the **Earnings** tab, request a withdrawal with your payment details.
+
+### Tips
+
+- Sessions are 45 minutes long.
+- A session stays in **Upcoming** until it ends, so you can rejoin if you drop out.
+- If a page sends you back to sign in, sign in again and you'll return to where you were.
+
 ## Tech stack
 
 | Layer | Technology |
